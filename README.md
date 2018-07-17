@@ -6,6 +6,8 @@ currently, the upstream project depends on unstable libraries (cats-effect, fs2,
 in production application.  This fork is essentially the same thing as the upstream project, but using stable
 dependencies.
 
+See [upstream issue](https://github.com/gvolpe/fs2-rabbit/issues/78).
+
 fs2-rabbit
 ==========
 
@@ -30,10 +32,10 @@ libraryDependencies += "com.itv" %% "fs2-rabbit-circe" % Version
 | Dependency  | Version    |
 | ----------- |:----------:|
 | cats        | 1.1.0      |
-| cats-effect | 1.0.0-RC2  |
-| fs2         | 1.0.0-M1   |
-| circe       | 0.10.0-M1  |
-| amqp-client | 4.6.0      |
+| cats-effect | 1.10.1     |
+| fs2         | 0.10.5     |
+| circe       | 0.9.3      |
+| amqp-client | 4.6.3      |
 
 ## Usage Guide
 
