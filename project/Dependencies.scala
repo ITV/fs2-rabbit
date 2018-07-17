@@ -3,7 +3,7 @@ import sbt._
 object Dependencies {
 
   object Versions {
-    val catsEffect = "0.10"
+    val catsEffect = "0.10.1"
     val fs2        = "0.10.5"
     val circe      = "0.9.3"
     val amqpClient = "4.6.0"
