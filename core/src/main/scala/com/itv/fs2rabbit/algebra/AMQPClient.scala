@@ -17,7 +17,7 @@
 package com.itv.fs2rabbit.algebra
 
 import com.itv.fs2rabbit.arguments.Arguments
-import com.itv.fs2rabbit.config.declaration.DeclarationQueueConfig
+import com.itv.fs2rabbit.config.declaration.{DeclarationExchangeConfig, DeclarationQueueConfig}
 import com.itv.fs2rabbit.config.deletion.{DeletionExchangeConfig, DeletionQueueConfig}
 import com.itv.fs2rabbit.model._
 import com.rabbitmq.client.Channel
@@ -40,7 +40,7 @@ trait Binding[F[_]] {
 }
 
 trait Declaration[F[_]] {
-  def declareExchange(channel: Channel, exchangeName: ExchangeName, exchangeType: ExchangeType): F[Unit]
+  def declareExchange(channel: Channel, exchangeConfig: DeclarationExchangeConfig): F[Unit]
   def declareQueue(channel: Channel, queueConfig: DeclarationQueueConfig): F[Unit]
   def declareQueueNoWait(channel: Channel, queueConfig: DeclarationQueueConfig): F[Unit]
   def declareQueuePassive(channel: Channel, queueName: QueueName): F[Unit]
