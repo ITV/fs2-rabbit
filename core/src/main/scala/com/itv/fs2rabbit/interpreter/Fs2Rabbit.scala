@@ -20,13 +20,10 @@ import cats.effect.{Concurrent, ConcurrentEffect}
 import cats.syntax.applicative._
 import com.itv.fs2rabbit.algebra.{AMQPClient, Connection}
 import com.itv.fs2rabbit.config.Fs2RabbitConfig
-import com.itv.fs2rabbit.config.declaration.DeclarationQueueConfig
+import com.itv.fs2rabbit.config.declaration.{DeclarationExchangeConfig, DeclarationQueueConfig}
 import com.itv.fs2rabbit.config.deletion.{DeletionExchangeConfig, DeletionQueueConfig}
 import com.itv.fs2rabbit.model._
 import com.itv.fs2rabbit.program._
-import com.itv.fs2rabbit.algebra.Connection
-import com.itv.fs2rabbit.model._
-import com.itv.fs2rabbit.program.{AckerConsumerProgram, PublishingProgram}
 import fs2.Stream
 
 import scala.concurrent.ExecutionContext
@@ -93,7 +90,10 @@ class Fs2Rabbit[F[_]: Concurrent](config: Fs2RabbitConfig,
 
   def declareExchange(exchangeName: ExchangeName, exchangeType: ExchangeType)(
       implicit channel: AMQPChannel): Stream[F, Unit] =
-    amqpClient.declareExchange(channel.value, exchangeName, exchangeType)
+    declareExchange(DeclarationExchangeConfig.default(exchangeName, exchangeType))
+
+  def declareExchange(exchangeConfig: DeclarationExchangeConfig)(implicit channel: AMQPChannel): Stream[F, Unit] =
+    amqpClient.declareExchange(channel.value, exchangeConfig)
 
   def declareQueue(queueConfig: DeclarationQueueConfig)(implicit channel: AMQPChannel): Stream[F, Unit] =
     amqpClient.declareQueue(channel.value, queueConfig)

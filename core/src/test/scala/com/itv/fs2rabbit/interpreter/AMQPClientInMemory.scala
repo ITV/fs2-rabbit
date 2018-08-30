@@ -20,12 +20,12 @@ import cats.effect.IO
 import cats.syntax.apply._
 import com.itv.fs2rabbit.algebra.{AMQPClient, AMQPInternals}
 import com.itv.fs2rabbit.arguments.Arguments
-import com.itv.fs2rabbit.config.declaration.DeclarationQueueConfig
+import com.itv.fs2rabbit.config.declaration.{DeclarationExchangeConfig, DeclarationQueueConfig}
 import com.itv.fs2rabbit.config.deletion.DeletionQueueConfig
 import com.itv.fs2rabbit.config.{Fs2RabbitConfig, deletion}
+import com.itv.fs2rabbit.model
 import com.itv.fs2rabbit.model.AckResult.{Ack, NAck}
 import com.itv.fs2rabbit.model._
-import com.itv.fs2rabbit.model
 import com.rabbitmq.client.Channel
 import fs2.Stream
 import fs2.async.{Ref, mutable}
@@ -127,10 +127,8 @@ class AMQPClientInMemory(ref: Ref[IO, AMQPInternals[IO]],
                             routingKey: model.RoutingKey,
                             args: model.ExchangeBindingArgs): Stream[IO, Unit] = Stream.eval(IO.unit)
 
-  override def declareExchange(channel: Channel,
-                               exchangeName: model.ExchangeName,
-                               exchangeType: ExchangeType): Stream[IO, Unit] =
-    Stream.eval(IO(exchanges += exchangeName) *> IO.unit)
+  override def declareExchange(channel: Channel, exchangeConfig: DeclarationExchangeConfig): Stream[IO, Unit] =
+    Stream.eval(IO(exchanges += exchangeConfig.exchangeName) *> IO.unit)
 
   override def declareQueue(channel: Channel, queueConfig: DeclarationQueueConfig): Stream[IO, Unit] =
     Stream.eval(IO(queues += queueConfig.queueName) *> IO.unit)
