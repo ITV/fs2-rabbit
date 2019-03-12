@@ -7,7 +7,7 @@ name := """fs2-rabbit-root"""
 
 organization in ThisBuild := "com.itv"
 
-version in ThisBuild := "0.8.2"
+version in ThisBuild := "0.8.3-SNAPSHOT"
 
 crossScalaVersions in ThisBuild := Seq("2.11.12", "2.12.6")
 
