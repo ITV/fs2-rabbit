@@ -20,6 +20,7 @@ import cats.effect.Sync
 import com.itv.fs2rabbit.algebra.{AMQPClient, Publishing}
 import com.itv.fs2rabbit.model.{ExchangeName, RoutingKey, StreamPublisher}
 import com.itv.fs2rabbit.algebra.Publishing
+import com.itv.fs2rabbit.model
 import com.itv.fs2rabbit.util.StreamEval
 import com.rabbitmq.client.Channel
 import fs2.Stream
@@ -36,4 +37,13 @@ class PublishingProgram[F[_]: Sync](AMQP: AMQPClient[Stream[F, ?], F])(implicit 
       }
     }
 
+  override def createPublisher(
+      channel: Channel,
+      exchangeName: ExchangeName): Stream[F, Stream[F, (model.AmqpMessage[String], RoutingKey)] => Stream[F, Unit]] =
+    SE.evalF {
+      _.flatMap {
+        case (msg, routingKey) =>
+          AMQP.basicPublish(channel, exchangeName, routingKey, msg)
+      }
+    }
 }

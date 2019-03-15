@@ -24,7 +24,7 @@ import com.itv.fs2rabbit.config.declaration.{DeclarationExchangeConfig, Declarat
 import com.itv.fs2rabbit.config.deletion.{DeletionExchangeConfig, DeletionQueueConfig}
 import com.itv.fs2rabbit.model._
 import com.itv.fs2rabbit.program._
-import fs2.Stream
+import fs2.{Sink, Stream}
 
 import scala.concurrent.ExecutionContext
 
@@ -67,6 +67,10 @@ class Fs2Rabbit[F[_]: Concurrent](config: Fs2RabbitConfig,
   def createPublisher(exchangeName: ExchangeName, routingKey: RoutingKey)(
       implicit channel: AMQPChannel): Stream[F, StreamPublisher[F]] =
     publishingProgram.createPublisher(channel.value, exchangeName, routingKey)
+
+  def createPublisher(exchangeName: ExchangeName)(
+      implicit channel: AMQPChannel): Stream[F, Sink[F, (AmqpMessage[String], RoutingKey)]] =
+    publishingProgram.createPublisher(channel.value, exchangeName)
 
   def bindQueue(queueName: QueueName, exchangeName: ExchangeName, routingKey: RoutingKey)(
       implicit channel: AMQPChannel): Stream[F, Unit] =

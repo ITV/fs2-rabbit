@@ -24,4 +24,6 @@ trait Publishing[F[_]] {
   def createPublisher(channel: Channel,
                       exchangeName: ExchangeName,
                       routingKey: RoutingKey): F[F[AmqpMessage[String]] => F[Unit]]
+
+  def createPublisher(channel: Channel, exchangeName: ExchangeName): F[F[(AmqpMessage[String], RoutingKey)] => F[Unit]]
 }
